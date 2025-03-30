@@ -29,7 +29,7 @@ def main():
     
 
 # SCRAPE FOR COURSE CODES AND FORMAT IT FOR INPUT
-    req: list[str] = []
+    REQ: list[str] = []
 
     for c in courses_find_all:
         title = c['title']
@@ -51,15 +51,26 @@ def main():
         print(title + ' ' + credits)
                 
         # print(prereqs)
-        req.append(title)
+        REQ.append(title)
     
-    txt = "".join(req)
+    txt = "".join(REQ)
     txtSub= re.sub(r"\xa0\s*","", txt)
 
     if re.search(r"[A-Z]{3}\d{3}",txtSub):
         ALL = re.findall(r"[A-Z]{3}\d{3}", txtSub)
         CSC = re.findall(r"CSC\d{3}", txtSub)
         NCSC = list(set(ALL)- set(CSC))
+    del REQ[:]
+
+    for r in range(13):
+        if(req)
+        REQ.append(ALL[r])
+        print(REQ)
+    print(set(ALL))
+    print("REQS FOR CSC")
+
+    # print(set(REQ.sort()))
+    
 
 # SCRAPE FOR COURSE NAMES AND FORMAT IT FOR INPUT
     # list was too small for the str? calls too much data from td
@@ -87,28 +98,23 @@ def main():
     courseTitles= re.sub(r'<td="hourscol">',"", courseTitles)
     courseTitles= re.sub(r'<td>',"", courseTitles)
 
-    print(courseTitles)
+    # print(courseTitles)
     parsedTitles = courseTitles.split('</td>')
     courseTitleFiltered = list(filter(None, parsedTitles))
-    print(courseTitleFiltered)
-    
+    # print(courseTitleFiltered)
+
     AllTitle = courseTitleFiltered
     TCSC: list[str] = []
 
     LCSC = len(CSC)
+    for i in range(LCSC+1):
+        TCSC.append(AllTitle[i])
+    # print(AllTitle)
     
-    for i in range(LCSC):
-        TCSC.append(CSC[i])
-    print(TCSC)
-    
-    
-            
     AllNCSC: list[str] = []
-    # AllNSCS = set(AllTitle) - set(CSCTitle)
-    
-    # print(CSCTitle)
-    
-    
+    AllNCSC = list(set(AllTitle)- set(TCSC))
+    # print(AllNCSC)
 
+    
 if __name__ == "__main__":
     main()

@@ -47,6 +47,9 @@ def main():
                 detail_title = re.sub(r"\xa0\s*","", detail_title)
                 prereqs.append(detail_title)
                 
+        credits = detail_soup.find('h3').text.split(' ')[-1]
+        print(title + ' ' + credits)
+                
         # print(prereqs)
         REQ.append(title)
     

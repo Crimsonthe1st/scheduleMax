@@ -48,12 +48,11 @@ def main():
                 detail_title = re.sub(r"\xa0\s*","", detail_title)
                 prereqs.append(detail_title)
             preREQS[title] = tuple(prereqs) if prereqs else (title,)
-            
                 
         credits = detail_soup.find('h3').text.split(' ')[-1]
-        # print(title + ' ' + credits)
+        # =(title, credits)
                 
-        print(preREQS)
+        # print(preREQS)
         REQ.append(title)
     
     txt = "".join(REQ)
@@ -134,20 +133,12 @@ def main():
     # print(RCSC) # RCSC is the class name of REQs
     # print(REQ)
 
-
+    Name = {}
 # CREATE TUPLE FOR SCHEDULING ALGORITHM'S PARAMETERS
-
+    for req, rcsc in zip(REQ, RCSC):
+        Name[req] = rcsc
+        print(Name)
 # Credits= {} {CORUSECODE: credits}
-    Name= {} # COURSECODE:Title
-    
 
-    # for req, rcsc in zip(REQ, RCSC):
-    #     Name[req] = rcsc
-    # print(Name)
-
-
-# preREQ= {} [PREREQCODE,COURSECODE]
-
-    
 if __name__ == "__main__":
     main()

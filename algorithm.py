@@ -139,6 +139,12 @@ def algorithm(graph, max_hours):
             # print(last_column_solutions[-1][i][j])
             last_column_solutions[-1][i][j] = startcourse[last_column_solutions[-1][i][j]]
             
+    # for i in range(len(last_column_solutions[-2])):
+    #     for j in range(len(last_column_solutions[-2][i])):
+    #         # print(last_column_solutions[-1][i][j])
+    #         last_column_solutions[-2][i][j] = startcourse[last_column_solutions[-2][i][j]]
+            
+    # return last_column_solutions[-1] + last_column_solutions[-2]
     return last_column_solutions[-1]
 
 

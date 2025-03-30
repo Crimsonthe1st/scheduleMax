@@ -4,22 +4,19 @@ WEB SCRAPPER PURPOSE:
 Major and or minor REQS
 Requirements for graduation 
 List of all classes for major/minor 
+
+tuple for prereq 2D prereq to req
+string array for req
 """
 
 #from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 import requests
-# import re
+import re
 
 def main():
-    #with sync_playwright() as p:
-        # browser = p.chromium.launch(headless=False)
-        # page = browser.new_page()
-        # try:
-        #     page.goto("https://catalog.uncg.edu/arts-sciences/computer-science/computer-science-bs/#requirementstext")
-        # except:
-        #     print("Error")
 
+# SCRAPER IS FED INFORMATION, CLEANS IT AND FORMATS IT
     base_url = 'https://catalog.uncg.edu'
 
     data = requests.get(base_url + '/arts-sciences/computer-science/computer-science-bs/#requirementstext').text
@@ -35,28 +32,16 @@ def main():
         detail_link = c['href']
         req.append(title)
     
+
     txt = "".join(req)
-    txt.replace("\\xa0","")
-    print(txt)
+    # print(txt)
 
-# SCRAPER IS FED INFORMATION AND TABLES IT
+    txtSub= re.sub(r"\xa0\s*","", txt)
 
-    # print(tableAsTXT)
-    # txt = "".join(tableAsTXT)
-    # cleanTXT = txt.replace("\\xa0"," ")
-    # print(cleanTXT)
-    # garbage: list[str] = []
+    if re.search(r"[A-Z]{3}\d{3}",txtSub):
+        txtCLEAN = re.findall(r"[A-Z]{3}\d{3}", txtSub)
+        print(txtCLEAN)
 
-    # cleaned = cleanTXT.split(",")
-    # for c in cleaned:
-    #     if(c != r"CSC\s\d\d\d"):
-    #         garbage.append(c)
-
-    #     # search = re.match(r"CSC\s\d\d\d", cleanTXT)
-    #     print("This is garbage: " , garbage)
-    #     print("This is cleaned: " , cleaned)
-    #     cleaned = list(set(cleaned)-set(garbage))
-    #     print(cleaned)
 
 # REGEX TEST PASSED 
             # cleanTXT = "CSC 607"

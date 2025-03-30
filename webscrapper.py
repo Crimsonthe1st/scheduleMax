@@ -46,6 +46,7 @@ def main():
 
 # SCRAPE FOR COURSE NAMES AND FORMAT IT FOR INPUT
     # list was too small for the str? calls too much data from td
+    courseTRANS: list[str] = []
     courseIN = ''
     courseOV = ''
 
@@ -57,18 +58,24 @@ def main():
             courseIN = courseIN + str(n)
         
     if re.search(r'<td>.{1,43}</td>', courseIN):
-        part1 = re.findall(r'<td>.{1,43}</td>', courseIN) #43 chars
+        part1 = re.findall(r'<td>.{1,43}</td>', courseIN) #43 chars is the longest title
         part2 = re.findall(r'<td>.{1,43}</td>', courseOV)
 
-        print(part1)
-        print(part2)
+    courses = part1 + part2
+    courseSub = "".join(courses)
+    courseSub = courseSub.replace("\n", "").replace("\r", "")
 
+    courseTitles= re.sub(r'<td class="hourscol"></td>',"", courseSub)
+    courseTitles= re.sub(r'<sup>.*?</sup>',"", courseTitles)
+    courseTitles= re.sub(r'<td="hourscol">',"", courseTitles)
+    courseTitles= re.sub(r'<td>',"", courseTitles)
 
-# TEST PRINTS FOR LISTS OF THE CODES
-        # print(ALL)
-        # print(CSC)
-        # print(NCSC)
+    print(courseTitles)
+    parsedTitles = courseTitles.split('</td>')
+    courseTitleFiltered = list(filter(None, parsedTitles))
+    print(courseTitleFiltered)
 
+ 
 
 if __name__ == "__main__":
     main()

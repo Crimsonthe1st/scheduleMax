@@ -3,7 +3,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 csc = nx.DiGraph()
-
 csc.add_edges_from([("CSC130","CSC230"),("CSC130","CSC250"),("CSC130","CSC261"),("CSC230","CSC330"),("CSC250","CSC330"),("CSC330","CSC339"),
                     ("CSC330","CSC340"),("CSC250","CSC350"),("CSC230","CSC362"),("CSC261","CSC362"),("CSC350","CSC452"),("CSC340","CSC462"),
                     ("CSC362","CSC462"),("CSC330","CSC471"),("MAT196","CSC130"),("MAT196","MAT296"),("MAT196","STA271orSTA290"),("PHI222","PHI222"),
@@ -11,6 +10,7 @@ csc.add_edges_from([("CSC130","CSC230"),("CSC130","CSC250"),("CSC130","CSC261"),
                     ("MACOC","MACOC"),("MACHW","MACHW"),("MACHFA","MACHFA"),("MACSBS","MACSBS"),("MACNS","MACNS"),("MACGC","MACGC"),("MACDE","MACDE"),
                     ("CSC462","CSC462"),("STA271orSTA290","STA271orSTA290"),("CSC471","CSC471"),("CSC339","CSC339"),("LANG204","LANG204"),("MAT296","MAT296"),
                     ("SCI2","SCI2"),("CSC452","CSC452")])
+
 # nx.draw_networkx(csc,arrows=True)
 # plt.draw()
 # plt.show()
@@ -18,6 +18,10 @@ csc.add_edges_from([("CSC130","CSC230"),("CSC130","CSC250"),("CSC130","CSC261"),
 credits={"CSC130":3,"CSC230":3,"CSC250":3,"CSC261":3,"CSC330":3,"CSC339":3,"CSC340":3,"CSC350":3,"CSC362":3,"CSC452":3,"CSC462":3,"CSC471":3,"CSC490":3,
          "MAT196":4,"MAT296":4,"STA271orSTA290":3,"PHI222":3,"SCI1":4,"SCI2":4,"LANG101":3,"LANG102":3,"LANG203":3,"LANG204":3,"MACF":3,"MACWC":3,"MACOC":3,
          "MACHW":3,"MACHFA":3,"MACSBS":3,"MACNS":3,"MACGC":3,"MACDE":3}
+
+name={"CSC130":"Introduction to Computer Science","CSC230":"Elementary Data Structures and Algorithms","CSC250":"Foundations of Computer Science I","CSC261":"Computer Organization and Assembly Language","CSC330":"Advanced Data Structures","CSC339":"Concepts of Programming Languages","CSC340":"Software Engineering","CSC350":"Foundations of Computer Science II","CSC362":"System Programming","CSC452":"Theory of Computation","CSC462":"Principles of Operating Systems","CSC471":"Principles of Database Systems","CSC490":"Senior Capstone",
+         "MAT196":"Calculus A","MAT296":"Calculus B","STA271orSTA290":"Fundamental Concepts of Statistics or ","PHI222":"Introduction to Probability and Statistical Inference","SCI1":"Science I and Lab","SCI2":"Science II and Lab","LANG101":"Language 101","LANG102":"Language 102","LANG203":"Language 203","LANG204":"Language 204","MACF":"MAC Foundations","MACWC":"MAC Written Communication","MACOC":"MAC Oral Communication",
+         "MACHW":"MAC Health and Wellness","MACHFA":"MAC CritThink Hum and Fine Art","MACSBS":"MAC Crit Think Soc and BehavSci","MACNS":"MAC CritThink Nat Sci","MACGC":"MAC Global and Intercultural","MACDE":"MAC Diversity and Equity"}
 
 schedule=[]
 
@@ -94,10 +98,6 @@ def find_longest_length_with_index(lst):
     return lst[max_index]
 
 
-
-
-
-
 def algorithm(graph):
     all_longest_paths = {node: find_longest_path(graph, node) for node in graph.nodes}
 
@@ -124,40 +124,47 @@ def algorithm(graph):
             realsources.add(source)
 
 
-    startcourse= list(realsources)
+    startcourse = list(realsources)
 
-    print(startcourse)
+    # print(startcourse)
 
     courseweight=[credits[x] for x in startcourse]
     coursevalue=[longest_path_dict[x] for x in startcourse]
 
     last_column_solutions = knapsack_all_solutions_last_column(16,courseweight,coursevalue)
+    
+    # print(last_column_solutions[-1])
+    for i in range(len(last_column_solutions[-1])):
+        for j in range(len(last_column_solutions[-1][i])):
+            # print(last_column_solutions[-1][i][j])
+            last_column_solutions[-1][i][j] = startcourse[last_column_solutions[-1][i][j]]
+            
+    return last_column_solutions[-1]
 
-    print(last_column_solutions[-1])
-    print(len(last_column_solutions[-1]))
+
+def algorithm_2(last_column_solutions, chose):
+    # print(last_column_solutions[-1])
+    # print(len(last_column_solutions[-1]))
     
     if len(last_column_solutions[-1]) == 0:
-        print("done")
+        # print("done")
         return True
 
-    chose=int(input())
-    chosed=last_column_solutions[-1][chose]
-
-    semester=[startcourse[x] for x in chosed]
-    for x in semester:
+    chosed=last_column_solutions[chose]
+    # semester=[startcourse[x] for x in chosed]
+    for x in chosed:
         csc.remove_node(x)
-    schedule.append(semester)
-    print(schedule)
+    schedule.append(chosed)
 
-    nx.draw_networkx(csc,arrows=True)
-    plt.draw()
-    plt.show()
+    # print(schedule)
 
-    algorithm(csc)
+    # nx.draw_networkx(csc,arrows=True)
+    # plt.draw()
+    # plt.show()
+
+    #algorithm(csc)
 
     
-nx.draw_networkx(csc,arrows=True)
-plt.draw()
-plt.show()
-
-algorithm(csc)
+# nx.draw_networkx(csc,arrows=True)
+# plt.draw()
+# plt.show()

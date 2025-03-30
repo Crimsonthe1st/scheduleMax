@@ -98,7 +98,7 @@ def find_longest_length_with_index(lst):
     return lst[max_index]
 
 
-def algorithm(graph):
+def algorithm(graph, max_hours):
     all_longest_paths = {node: find_longest_path(graph, node) for node in graph.nodes}
 
     longest_path_dict={}
@@ -131,7 +131,7 @@ def algorithm(graph):
     courseweight=[credits[x] for x in startcourse]
     coursevalue=[longest_path_dict[x] for x in startcourse]
 
-    last_column_solutions = knapsack_all_solutions_last_column(16,courseweight,coursevalue)
+    last_column_solutions = knapsack_all_solutions_last_column(max_hours,courseweight,coursevalue)
     
     # print(last_column_solutions[-1])
     for i in range(len(last_column_solutions[-1])):

@@ -10,8 +10,9 @@ from algorithm import algorithm_2
 from algorithm import schedule
 from streamlit_js_eval import streamlit_js_eval
 
-last_column_solutions = algorithm(csc)
-
+if not 'pressed' in st.session_state:
+    st.session_state.pressed = False
+    
 def make_course_dataframe(names):
     return pd.DataFrame(
         {
@@ -128,11 +129,18 @@ st.subheader('Build schedule')
 2
 # Keep track of semester you are at
 
-choice = st.selectbox('Choose the schedule you want for the upcoming semester.', list(range(1, len(last_column_solutions) + 1)), 0)
+if st.button('Begin generating semesters', disabled=st.session_state.pressed):
+    last_column_solutions = algorithm(csc, max_hours)
+    st.session_state.pressed = True
 
-if st.button('Generate next') and len(last_column_solutions) != 0:
+choice = st.selectbox('Choose the schedule you want for the upcoming semester.', list(range(1, len(last_column_solutions) + 1)), 0, disabled=not st.session_state.pressed)
+
+st.write(max_hours)
+st.write(st.session_state.pressed)
+
+if st.button('Next', disabled=not st.session_state.pressed) and len(last_column_solutions) != 0:
     algorithm_2(last_column_solutions, choice - 1)
-    last_column_solutions = algorithm(csc)
+    last_column_solutions = algorithm(csc, max_hours)
     streamlit_js_eval(js_expressions="parent.window.location.reload()")
     
 scheds = []

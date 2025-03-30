@@ -1,23 +1,31 @@
 import streamlit as st
 import pandas as pd
 import networkx as nx
+import matplotlib.pyplot as plt
+import pydot
 from algorithm import csc
 from algorithm import credits
 from algorithm import name
 from algorithm import algorithm
 from algorithm import algorithm_2
 from algorithm import schedule
+from algorithm import add_subgraph_to_dot_file
+from  algorithm import graph
 from time import sleep
 
 if not 'pressed' in st.session_state:
     st.session_state.pressed = False
+
+try:
+    subgraph_content
+except NameError:
+    subgraph_content=""
     
 choice = 1    
 last_column_solutions = algorithm(csc, 15)
-    
-def timer():
-    for _ in stqdm(range(50)):
-        sleep(0.1)
+
+
+
     
 def make_course_dataframe(names):
     return pd.DataFrame(
@@ -67,10 +75,13 @@ st.set_page_config(
     layout='wide'
 )
 
-st.title('Generator')
-st.sidebar.write('Generation -- create a schedule')
+st.title('📓 Credit Cruncher')
+# st.sidebar.write('Generation -- generate yourself a schedule')
 st.write('Algorithmically generate your dream college schedule.')
-
+st.divider()
+st.subheader('About')
+st.write('Our application uses 0/1 Knapsack to algorithmically generate schedules for students to determine optimal class schedules. Equip with our web scraper, students from colleges and universities ' +
+         'have the ability to input their own courses, majors, and requirements, in order to generate schedules.')
 st.divider()
 
 st.subheader('Preferences')
@@ -78,8 +89,6 @@ st.subheader('Preferences')
 st.divider()
 
 previous_courses = st.multiselect('What previous courses have you passed?', list(credits.keys()), disabled=st.session_state.pressed)
-
-credit_hours = st.slider('What is your current total credit hours?', 0, 150, disabled=st.session_state.pressed)
 
 max_hours = st.slider(
     'What are the maximum credit hours you would like per semester?', 
@@ -137,3 +146,12 @@ for i in range(len(schedule)):
         1,
         False,
     )
+
+
+
+
+if len(schedule)>0:
+    subgraph_content = add_subgraph_to_dot_file('graph.dot',len(schedule),schedule[-1], subgraph_content)
+with open('graph.dot', 'r') as f:
+    savedata=f.read() 
+    st.graphviz_chart(savedata)

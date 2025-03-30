@@ -29,7 +29,7 @@ def main():
     
 
 # SCRAPE FOR COURSE CODES AND FORMAT IT FOR INPUT
-    REQ: list[str] = []
+    req: list[str] = []
 
     for c in courses_find_all:
         title = c['title']
@@ -50,17 +50,17 @@ def main():
         credits = detail_soup.find('h3').text.split(' ')[-1]
         # print(title + ' ' + credits)
                 
-        # print(prereqs)
-        REQ.append(title)
+        print(prereqs)
+        req.append(title)
     
-    txt = "".join(REQ)
+    txt = "".join(req)
     txtSub= re.sub(r"\xa0\s*","", txt)
 
     if re.search(r"[A-Z]{3}\d{3}",txtSub):
         ALL = re.findall(r"[A-Z]{3}\d{3}", txtSub)
         CSC = re.findall(r"CSC\d{3}", txtSub)
         NCSC = list(set(ALL)- set(CSC))
-    del REQ[:]
+    del req[:]
 
     for r in range(13):
         if ALL[r] not in REQ:
@@ -70,7 +70,6 @@ def main():
     # print("REQS FOR CSC")
 
     # print(set(REQ.sort()))
-    
 
 # SCRAPE FOR COURSE NAMES AND FORMAT IT FOR INPUT
     # list was too small for the str? calls too much data from td
@@ -98,7 +97,7 @@ def main():
     courseTitles= re.sub(r'<td="hourscol">',"", courseTitles)
     courseTitles= re.sub(r'<td>',"", courseTitles)
 
-    # print(courseTitles)
+    print(courseTitles)
     parsedTitles = courseTitles.split('</td>')
     courseTitleFiltered = list(filter(None, parsedTitles))
     # print(courseTitleFiltered)
@@ -107,10 +106,13 @@ def main():
     TCSC: list[str] = []
 
     LCSC = len(CSC)
-    for i in range(LCSC+1):
-        TCSC.append(AllTitle[i])
-    # print(AllTitle)
     
+    for i in range(LCSC):
+        TCSC.append(CSC[i])
+    print(TCSC)
+    
+    
+            
     AllNCSC: list[str] = []
     AllNCSC = list(set(AllTitle)- set(TCSC))
     # print(AllNCSC)

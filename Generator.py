@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import networkx as nx
-import random
 from algorithm import csc
 from algorithm import credits
 from algorithm import name
@@ -9,8 +8,6 @@ from algorithm import algorithm
 from algorithm import algorithm_2
 from algorithm import schedule
 from time import sleep
-# from streamlit_js_eval import streamlit_js_eval
-from stqdm import stqdm
 
 if not 'pressed' in st.session_state:
     st.session_state.pressed = False
@@ -80,9 +77,9 @@ st.subheader('Preferences')
 
 st.divider()
 
-previous_courses = st.multiselect('What previous courses have you passed?', list(credits.keys()))
+previous_courses = st.multiselect('What previous courses have you passed?', list(credits.keys()), disabled=st.session_state.pressed)
 
-credit_hours = st.slider('What is your current total credit hours?', 0, 150)
+credit_hours = st.slider('What is your current total credit hours?', 0, 150, disabled=st.session_state.pressed)
 
 max_hours = st.slider(
     'What are the maximum credit hours you would like per semester?', 
@@ -100,32 +97,6 @@ st.subheader('Build schedule')
 
 st.divider()
 
-# Dummy data
-
-# for i in range(8):
-#     scheds = []
-#     for j in range(9):
-#         schedule = make_course_dataframe(random.sample(range(len(credits)), random.randrange(4, 5)), str(i))
-#         scheds.append(schedule)
-        
-#     generate_columns(
-#         scheds,
-#         3
-#     )
-
-# example_schedule_fall2025_1 = make_course_dataframe([0, 3, 8, 6], 'Fall 2025')
-# example_schedule_fall2025_2 = make_course_dataframe([0, 3, 5, 6], 'Fall 2025')
-# example_schedule_spring2026_1 = make_course_dataframe([1, 2, 4, 8], 'Spring 2026')
-# example_schedule_spring2026_2 = make_course_dataframe([1, 2, 4, 5], 'Spring 2026')
-# example_schedule_fall2027_1 = make_course_dataframe([7], 'Fall 2027')
-
-# generate_columns(
-#     [example_schedule_fall2025_1, example_schedule_fall2025_2, 
-#      example_schedule_spring2026_1, example_schedule_spring2026_2, 
-#      example_schedule_fall2027_1],
-#     3
-# )
-
 # make a choice of a semester plan, press next and be prompted with more choices
 # there should be a title telling you what term this is for, and you should be able to go back and make a new choice
 # schedule should save as you go
@@ -133,12 +104,13 @@ st.divider()
 
 if st.button('Begin generating semesters', disabled=st.session_state.pressed):
     last_column_solutions = algorithm(csc, max_hours)
+    for x in previous_courses:
+        csc.remove_node(x)
     st.session_state.pressed = True
     
 if st.button('Next', disabled=not st.session_state.pressed) and len(last_column_solutions) != 0:
     algorithm_2(last_column_solutions, choice - 1)
     last_column_solutions = algorithm(csc, max_hours)
-    # streamlit_js_eval(js_expressions="parent.window.location.reload()")
 
 choice = st.selectbox('Choose the schedule you want for the upcoming semester.', list(range(1, len(last_column_solutions) + 1)), 0, disabled=not st.session_state.pressed)
     

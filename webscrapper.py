@@ -60,11 +60,11 @@ def main():
     del REQ[:]
 
     for r in range(13):
-        if(req)
-        REQ.append(ALL[r])
-        print(REQ)
-    print(set(ALL))
-    print("REQS FOR CSC")
+        if ALL[r] not in REQ:
+            REQ.append(ALL[r])
+    # print(REQ)
+    # print(set(ALL))
+    # print("REQS FOR CSC")
 
     # print(set(REQ.sort()))
     
@@ -100,7 +100,7 @@ def main():
     courseTitleFiltered = list(filter(None, parsedTitles))
     # print(courseTitleFiltered)
 
-    AllTitle = courseTitleFiltered
+    AllTitle = courseTitleFiltered # 14 courses are CSC REQS
     TCSC: list[str] = []
 
     LCSC = len(CSC)
@@ -111,6 +111,13 @@ def main():
     AllNCSC: list[str] = []
     AllNCSC = list(set(AllTitle)- set(TCSC))
     # print(AllNCSC)
+
+    RCSC: list[str] = []
+    for i in range(13):
+        RCSC.append(AllTitle[i])
+
+    print(RCSC)
+    print("REQ TITLES FOR CSC")
 
     
 if __name__ == "__main__":

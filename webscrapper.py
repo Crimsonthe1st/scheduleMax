@@ -48,7 +48,7 @@ def main():
                 prereqs.append(detail_title)
                 
         credits = detail_soup.find('h3').text.split(' ')[-1]
-        print(title + ' ' + credits)
+        # print(title + ' ' + credits)
                 
         # print(prereqs)
         REQ.append(title)
@@ -103,7 +103,7 @@ def main():
     courseTitleFiltered = list(filter(None, parsedTitles))
     # print(courseTitleFiltered)
 
-    AllTitle = courseTitleFiltered # 14 courses are CSC REQS
+    AllTitle = courseTitleFiltered # 13 courses are CSC REQS
     TCSC: list[str] = []
 
     LCSC = len(CSC)
@@ -119,8 +119,32 @@ def main():
     for i in range(13):
         RCSC.append(AllTitle[i])
 
-    print(RCSC)
+    # print(RCSC)
     print("REQ TITLES FOR CSC")
+    # print(REQ) # REQ is the code for classes
+
+    #HAVE TO HARD CODE THE LAST 2 CODES BECAUSE IDK WHAT HAPPENED TO THE LOOP BUT IT WASNT LOOPING PROPERLY
+    REQ.append("CSC471")
+    REQ.append("CSC490")
+    REQ.insert(10,"CSC462")
+
+    
+    # print("The len of REQ is: ", len(REQ), " The leng of RCSC is: ", len(RCSC))
+    # print(RCSC) # RCSC is the class name of REQs
+    # print(REQ)
+
+
+# CREATE TUPLE FOR SCHEDULING ALGORITHM'S PARAMETERS
+
+# Credits= {} {CORUSECODE: credits}
+    Name= {} # COURSECODE:Title
+
+    for req, rcsc in zip(REQ, RCSC):
+        Name[req] = rcsc
+    print(Name)
+
+
+# preREQ= {} [PREREQCODE,COURSECODE]
 
     
 if __name__ == "__main__":

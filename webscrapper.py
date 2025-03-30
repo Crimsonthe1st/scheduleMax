@@ -32,15 +32,21 @@ def main():
         detail_link = c['href']
         req.append(title)
     
-
     txt = "".join(req)
     # print(txt)
 
     txtSub= re.sub(r"\xa0\s*","", txt)
 
     if re.search(r"[A-Z]{3}\d{3}",txtSub):
-        txtCLEAN = re.findall(r"[A-Z]{3}\d{3}", txtSub)
-        print(txtCLEAN)
+        ALL = re.findall(r"[A-Z]{3}\d{3}", txtSub)
+        CSC = re.findall(r"CSC\d{3}", txtSub)
+        NCSC = list(set(ALL)- set(CSC))
+
+        print(ALL)
+        print(CSC)
+        print(NCSC)
+
+
 
 
 # REGEX TEST PASSED 

@@ -74,8 +74,22 @@ def main():
     parsedTitles = courseTitles.split('</td>')
     courseTitleFiltered = list(filter(None, parsedTitles))
     print(courseTitleFiltered)
+    
+    AllTitle = courseTitleFiltered
+    TCSC: list[str] = []
 
- 
+    LCSC = len(CSC)
+    
+    for i in range(LCSC):
+        TCSC.append(CSC[i])
+    print(TCSC)
+    
+    
+            
+    AllNCSC: list[str] = []
+    # AllNSCS = set(AllTitle) - set(CSCTitle)
+    
+    # print(CSCTitle)
 
 if __name__ == "__main__":
     main()

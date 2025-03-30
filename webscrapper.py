@@ -13,6 +13,7 @@ string array for req
 from bs4 import BeautifulSoup
 import requests
 import re
+import string
 
 def main():
 
@@ -22,9 +23,12 @@ def main():
     data = requests.get(base_url + '/arts-sciences/computer-science/computer-science-bs/#requirementstext').text
     soup = BeautifulSoup(data)
 
+# good soup :)
     courses_find_all = soup.find_all('a', {'class': 'bubblelink code'})
+    course_name_all = soup.find_all('tr')
+    
 
-    courses = []
+# SCRAPE FOR COURSE CODES AND FORMAT IT FOR INPUT
     req: list[str] = []
 
     for c in courses_find_all:
@@ -33,8 +37,6 @@ def main():
         req.append(title)
     
     txt = "".join(req)
-    # print(txt)
-
     txtSub= re.sub(r"\xa0\s*","", txt)
 
     if re.search(r"[A-Z]{3}\d{3}",txtSub):
@@ -42,17 +44,31 @@ def main():
         CSC = re.findall(r"CSC\d{3}", txtSub)
         NCSC = list(set(ALL)- set(CSC))
 
-        print(ALL)
-        print(CSC)
-        print(NCSC)
+# SCRAPE FOR COURSE NAMES AND FORMAT IT FOR INPUT
+    # list was too small for the str? calls too much data from td
+    courseIN = ''
+    courseOV = ''
+
+    for n in course_name_all:
+        name = n
+        if(len(courseIN) >= 10000):
+            courseOV = courseOV + str(n)
+        else:
+            courseIN = courseIN + str(n)
+        
+    if re.search(r'<td>.{1,43}</td>', courseIN):
+        part1 = re.findall(r'<td>.{1,43}</td>', courseIN) #43 chars
+        part2 = re.findall(r'<td>.{1,43}</td>', courseOV)
+
+        print(part1)
+        print(part2)
 
 
+# TEST PRINTS FOR LISTS OF THE CODES
+        # print(ALL)
+        # print(CSC)
+        # print(NCSC)
 
-
-# REGEX TEST PASSED 
-            # cleanTXT = "CSC 607"
-            # search = re.match(r"CSC\s\d\d\d", cleanTXT)
-            # print(search)
 
 if __name__ == "__main__":
     main()

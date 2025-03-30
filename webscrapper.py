@@ -34,6 +34,20 @@ def main():
     for c in courses_find_all:
         title = c['title']
         detail_link = c['href']
+        
+        # pre-reqs
+        detail_data = requests.get(base_url + detail_link).text
+        detail_soup = BeautifulSoup(detail_data)
+        detail_sec = detail_soup.find('p', {'class': 'courseblockextra noindent'})
+        prereqs = []
+        if detail_sec is not None:
+            detail_find_all = detail_sec.find_all('a', {'class': 'bubblelink code'})
+            for s in detail_find_all:
+                detail_title = s['title']
+                detail_title = re.sub(r"\xa0\s*","", detail_title)
+                prereqs.append(detail_title)
+                
+        # print(prereqs)
         REQ.append(title)
     
     txt = "".join(REQ)

@@ -67,10 +67,13 @@ st.set_page_config(
     layout='wide'
 )
 
-st.title('Generator')
-st.sidebar.write('Generation -- create a schedule')
+st.title('📓 Credit Cruncher')
+# st.sidebar.write('Generation -- generate yourself a schedule')
 st.write('Algorithmically generate your dream college schedule.')
-
+st.divider()
+st.subheader('About')
+st.write('Our application uses 0/1 Knapsack to algorithmically generate schedules for students to determine optimal class schedules. Equip with our web scraper, students from colleges and universities ' +
+         'have the ability to input their own courses, majors, and requirements, in order to generate schedules.')
 st.divider()
 
 st.subheader('Preferences')
@@ -78,8 +81,6 @@ st.subheader('Preferences')
 st.divider()
 
 previous_courses = st.multiselect('What previous courses have you passed?', list(credits.keys()), disabled=st.session_state.pressed)
-
-credit_hours = st.slider('What is your current total credit hours?', 0, 150, disabled=st.session_state.pressed)
 
 max_hours = st.slider(
     'What are the maximum credit hours you would like per semester?', 

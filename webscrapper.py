@@ -29,7 +29,8 @@ def main():
     
 
 # SCRAPE FOR COURSE CODES AND FORMAT IT FOR INPUT
-    req: list[str] = []
+    REQ: list[str] = []
+    preREQS = {}
 
     for c in courses_find_all:
         title = c['title']
@@ -46,30 +47,28 @@ def main():
                 detail_title = s['title']
                 detail_title = re.sub(r"\xa0\s*","", detail_title)
                 prereqs.append(detail_title)
+            preREQS[title] = tuple(prereqs) if prereqs else (title,)
+            
                 
         credits = detail_soup.find('h3').text.split(' ')[-1]
         # print(title + ' ' + credits)
                 
-        print(prereqs)
-        req.append(title)
+        print(preREQS)
+        REQ.append(title)
     
-    txt = "".join(req)
+    txt = "".join(REQ)
     txtSub= re.sub(r"\xa0\s*","", txt)
 
     if re.search(r"[A-Z]{3}\d{3}",txtSub):
         ALL = re.findall(r"[A-Z]{3}\d{3}", txtSub)
         CSC = re.findall(r"CSC\d{3}", txtSub)
         NCSC = list(set(ALL)- set(CSC))
-    del req[:]
+    # del req[:]
 
     for r in range(13):
         if ALL[r] not in REQ:
             REQ.append(ALL[r])
-    # print(REQ)
-    # print(set(ALL))
-    # print("REQS FOR CSC")
 
-    # print(set(REQ.sort()))
 
 # SCRAPE FOR COURSE NAMES AND FORMAT IT FOR INPUT
     # list was too small for the str? calls too much data from td
@@ -97,7 +96,7 @@ def main():
     courseTitles= re.sub(r'<td="hourscol">',"", courseTitles)
     courseTitles= re.sub(r'<td>',"", courseTitles)
 
-    print(courseTitles)
+    # print(courseTitles)
     parsedTitles = courseTitles.split('</td>')
     courseTitleFiltered = list(filter(None, parsedTitles))
     # print(courseTitleFiltered)
@@ -109,7 +108,7 @@ def main():
     
     for i in range(LCSC):
         TCSC.append(CSC[i])
-    print(TCSC)
+    # print(TCSC)
     
     
             
@@ -131,7 +130,7 @@ def main():
     REQ.insert(10,"CSC462")
 
     
-    # print("The len of REQ is: ", len(REQ), " The leng of RCSC is: ", len(RCSC))
+  
     # print(RCSC) # RCSC is the class name of REQs
     # print(REQ)
 
@@ -140,10 +139,11 @@ def main():
 
 # Credits= {} {CORUSECODE: credits}
     Name= {} # COURSECODE:Title
+    
 
-    for req, rcsc in zip(REQ, RCSC):
-        Name[req] = rcsc
-    print(Name)
+    # for req, rcsc in zip(REQ, RCSC):
+    #     Name[req] = rcsc
+    # print(Name)
 
 
 # preREQ= {} [PREREQCODE,COURSECODE]

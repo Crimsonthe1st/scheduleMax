@@ -2,6 +2,7 @@ import math
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
 csc = nx.DiGraph()
 csc.add_edges_from([("CSC130","CSC230"),("CSC130","CSC250"),("CSC130","CSC261"),("CSC230","CSC330"),("CSC250","CSC330"),("CSC330","CSC339"),
                     ("CSC330","CSC340"),("CSC250","CSC350"),("CSC230","CSC362"),("CSC261","CSC362"),("CSC350","CSC452"),("CSC340","CSC462"),
@@ -11,6 +12,8 @@ csc.add_edges_from([("CSC130","CSC230"),("CSC130","CSC250"),("CSC130","CSC261"),
                     ("CSC462","CSC462"),("STA271orSTA290","STA271orSTA290"),("CSC471","CSC471"),("CSC339","CSC339"),("LANG204","LANG204"),("MAT296","MAT296"),
                     ("SCI2","SCI2"),("CSC452","CSC452")])
 
+graph=csc.copy()
+nx.drawing.nx_pydot.write_dot(graph,'graph.dot')
 # nx.draw_networkx(csc,arrows=True)
 # plt.draw()
 # plt.show()
@@ -24,6 +27,8 @@ name={"CSC130":"Introduction to Computer Science","CSC230":"Elementary Data Stru
          "MACHW":"MAC Health and Wellness","MACHFA":"MAC CritThink Hum and Fine Art","MACSBS":"MAC Crit Think Soc and BehavSci","MACNS":"MAC CritThink Nat Sci","MACGC":"MAC Global and Intercultural","MACDE":"MAC Diversity and Equity"}
 
 schedule=[]
+
+colors=["red","orange","yellow","green","blue","purple","grey"]
 
 def knapsack_all_solutions_last_column(capacity, weights, values):
     n = len(weights)
@@ -174,3 +179,33 @@ def algorithm_2(last_column_solutions, chose):
 # nx.draw_networkx(csc,arrows=True)
 # plt.draw()
 # plt.show()
+# old=""
+def add_subgraph_to_dot_file(dot_file_path, semester, nodes, subgraph_content):
+    # Read the original content of the .dot file
+    with open(dot_file_path, 'r') as file:
+        dot_content = file.readlines()
+
+    # Locate the insertion point for the subgraph
+    insertion_index = len(dot_content)
+    for index, line in enumerate(dot_content):
+        if line.strip() == '}':  # Find the closing brace of the graph
+            insertion_index = index
+            break
+        
+    # Create the subgraph definition
+    # subgraph_content=""
+    for i in nodes:
+        s=f"{i} [style=filled, fillcolor={colors[semester%len(colors)-1]}];\n"
+        subgraph_content += s
+        # old+=s
+    # Insert the subgraph content before the closing brace
+    
+
+    dot_content.insert(insertion_index, subgraph_content)
+
+    
+    with open(dot_file_path, 'w') as file:
+        file.writelines(dot_content)
+    file.close()
+
+    return subgraph_content

@@ -1,23 +1,31 @@
 import streamlit as st
 import pandas as pd
 import networkx as nx
+import matplotlib.pyplot as plt
+import pydot
 from algorithm import csc
 from algorithm import credits
 from algorithm import name
 from algorithm import algorithm
 from algorithm import algorithm_2
 from algorithm import schedule
+from algorithm import add_subgraph_to_dot_file
+from  algorithm import graph
 from time import sleep
 
 if not 'pressed' in st.session_state:
     st.session_state.pressed = False
+
+try:
+    subgraph_content
+except NameError:
+    subgraph_content=""
     
 choice = 1    
 last_column_solutions = algorithm(csc, 15)
-    
-def timer():
-    for _ in stqdm(range(50)):
-        sleep(0.1)
+
+
+
     
 def make_course_dataframe(names):
     return pd.DataFrame(
@@ -138,3 +146,12 @@ for i in range(len(schedule)):
         1,
         False,
     )
+
+
+
+
+if len(schedule)>0:
+    subgraph_content = add_subgraph_to_dot_file('graph.dot',len(schedule),schedule[-1], subgraph_content)
+with open('graph.dot', 'r') as f:
+    savedata=f.read() 
+    st.graphviz_chart(savedata)

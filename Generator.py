@@ -25,8 +25,6 @@ choice = 1
 last_column_solutions = algorithm(csc, 15)
 
 
-
-    
 def make_course_dataframe(names):
     return pd.DataFrame(
         {
@@ -47,7 +45,7 @@ def render_course_dataframe(df, col):
         hide_index=True,
     )  
     
-def generate_columns(dfs, width, indices):
+def generate_columns(dfs, width, indices, tab):
     o = len(dfs)
     l = len(dfs)
     
@@ -56,7 +54,7 @@ def generate_columns(dfs, width, indices):
     
     while l > 0:
         m = min(l, width)
-        cols = st.columns(m)
+        cols = tab.columns(m)
         
         for i in range(m):
             x = l - 1 - i
@@ -133,25 +131,26 @@ with st.container(height=700):
         generate_columns(
             scheds,
             3,
-            True
+            True,
+            st
         )
         
 st.divider()
 
-st.subheader('Current schedule')
-for i in range(len(schedule)):
-    df = make_course_dataframe(schedule[i])
-    generate_columns(
-        [df],
-        1,
-        False,
-    )
+with st.container(height=700):
+    tab1, tab2 = st.tabs(['Current schedule', 'Graduation tree'])
 
+    for i in range(len(schedule)):
+        df = make_course_dataframe(schedule[i])
+        generate_columns(
+            [df],
+            1,
+            False,
+            tab1
+        )
 
-
-
-if len(schedule)>0:
-    subgraph_content = add_subgraph_to_dot_file('graph.dot',len(schedule),schedule[-1], subgraph_content)
-with open('graph.dot', 'r') as f:
-    savedata=f.read() 
-    st.graphviz_chart(savedata)
+    if len(schedule)>0:
+        subgraph_content = add_subgraph_to_dot_file('graph.dot',len(schedule),schedule[-1], subgraph_content)
+    with open('graph.dot', 'r') as f:
+        savedata=f.read() 
+        tab2.graphviz_chart(savedata)
